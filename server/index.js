@@ -1,28 +1,23 @@
-const express = require('express');
-const cors = require('cors');
-const routes = require('../routes');
-const { sequelize } = require('../database/models');
-require('dotenv').config();
+const { User } = require('../database/models');
 
-const app = express(); // 👈 DEFINICIÓN DE APP
-const PORT = process.env.PORT || 8080;
-
-app.use(cors());
-app.use(express.json());
-app.use('/api', routes);
-
-app.listen(PORT, async () => {
-  console.log(`✅ Servidor corriendo en http://localhost:${PORT}`);
-
+const postUser = async (req, res) => {
   try {
-    await sequelize.authenticate();
-    console.log('✅ Conectado a PostgreSQL');
+    const { name, email, age, comments } = req.body;
 
-    await sequelize.sync({ alter: true });
-    console.log('✅ Tablas sincronizadas correctamente');
+    if (!name || !email || !age || !comments) {
+      return res.status(400).json({ error: 'Todos los campos son requeridos' });
+    }
 
-  } catch (err) {
-    console.error('❌ Error conectando a la base de datos:');
-    console.error(err.stack || err);
+    const newUser = await User.create({ name, email, age, comments });
+    res.status(201).json(newUser);
+
+  } catch (error) {
+    console.error('❌ Error al crear usuario:', error);
+    res.status(500).json({ error: 'Error al crear usuario' });
   }
-});
+};
+
+module.exports = {
+  postUser,
+  // ... otros controladores
+};
