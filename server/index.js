@@ -1,9 +1,11 @@
+const express = require('express');
 const cors = require('cors');
 const routes = require('../routes');
 const { sequelize } = require('../database/models');
 require('dotenv').config();
 
-const app = express(); // 👈 DEFINICIÓN DE APP
+const app = express(); // 👈 Aquí ya está bien definido
+
 const PORT = process.env.PORT || 8080;
 
 app.use(cors());
