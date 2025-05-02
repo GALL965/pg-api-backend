@@ -12,9 +12,16 @@ const getUsers = async (req, res) => {
 const createUser = async (req, res) => {
   try {
     const { name, email, age, comments } = req.body;
+
+    // Validación simple
+    if (!name || !email || !age || !comments) {
+      return res.status(400).json({ error: 'Todos los campos son obligatorios' });
+    }
+
     const user = await User.create({ name, email, age, comments });
     res.status(201).json(user);
   } catch (err) {
+    console.error('❌ Error al crear usuario:', err);
     res.status(400).json({ error: err.message });
   }
 };
