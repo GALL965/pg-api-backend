@@ -1,5 +1,4 @@
 name: Deploy Backend to Docker Hub
-
 on:
   push:
     branches: [ master ]
@@ -24,3 +23,4 @@ jobs:
           context: .
           push: true
           tags: gall96/pg-api-backend:latest
+
