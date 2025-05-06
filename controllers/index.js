@@ -36,4 +36,33 @@ const deleteUser = async (req, res) => {
   }
 };
 
-module.exports = { getUsers, createUser, deleteUser };
+const updateUser = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const { name, email, age, comments } = req.body;
+
+    if (!name || !email || !age || !comments) {
+      return res.status(400).json({ error: "Todos los campos son obligatorios" });
+    }
+
+    const user = await User.findByPk(id);
+    if (!user) {
+      return res.status(404).json({ error: "Usuario no encontrado" });
+    }
+
+    await user.update({ name, email, age, comments });
+    res.json(user);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+
+
+module.exports = {
+  getUsers,
+  createUser,
+  deleteUser,
+  updateUser,
+};
+
